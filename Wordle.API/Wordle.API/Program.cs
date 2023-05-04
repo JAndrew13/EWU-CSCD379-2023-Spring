@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Wordle.API.Data;
-using Wordle.API.Services;
+using Wordle.Api.Data;
+using Wordle.Api.Services;
 
 var MyAllowAllOrigins = "_myAllowAllOrigins";
 
@@ -23,35 +23,30 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add service to connect to database..
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    // this controls how to send requests to the DB
     options.UseSqlServer(connectionString);
 });
-
 builder.Services.AddScoped<WordService>();
 
 var app = builder.Build();
 
-// Scoped Database Instance
 using (var scope = app.Services.CreateScope())
-    {
-    // Get the instance of AppDbContext
+{
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
     Word.SeedWords(db);
-    
-    }
- 
+}
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-        {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-        }
+
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 

@@ -1,29 +1,26 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Wordle.API.Data;
-using Wordle.API.Services;
+using Wordle.Api.Data;
+using Wordle.Api.Services;
 
-namespace Wordle.API.Controllers
-    {
+namespace Wordle.Api.Controllers
+{
     [Route("[controller]")]
     [ApiController]
     public class WordController : ControllerBase
-        {
-        private readonly WordService : ControllerBase;
+    {
+        private readonly WordService _wordService;
+
         public WordController(WordService wordService)
         {
             _wordService = wordService;
         }
 
         [HttpGet]
-         public string Get()
-            {
-                return _wordService.GetRandomWord();
-            
-            }
         public async Task<string> Get()
-            {
-                return await _wordService.GetRandomWordAsync();
-            }
+        {
+            return await _wordService.GetRandomWord();
         }
     }
+}
+
