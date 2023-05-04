@@ -9,8 +9,11 @@ export enum ValidationStatus {
   Valid = 'Valid'
 }
 export class WordsService {
+  
+
   static getRandomWord(): string {
     return this.#words[Math.floor(Math.random() * this.#words.length)]
+    // return "beach"
   }
 
   static getFullList(): string[] {
@@ -31,38 +34,48 @@ export class WordsService {
     }
   }
 
-  static matchWords(guesses: Array<Word>): string[] {
-    let wordList = this.#words.slice()
-    let filteredWordList: string[] = []
+ static matchWords(guesses: Array<Word>): string[] {
+  let wordList = this.#words.slice()
+  let filteredWordList: string[] = []
 
-    guesses.forEach((guess) => {
-      if (guess.text.trim() !== '') {
-        wordList = wordList.filter((word) => {
-          let lettersMatch = true
-          for (let i = 0; i < guess.letters.length; i++) {
-            const guessLetter = guess.letters[i]
+  guesses.forEach((guess) => {
+    if (guess.text.trim() !== '') {
+      wordList = wordList.filter((word) => {
+        let lettersMatch = true
+        for (let i = 0; i < guess.letters.length; i++) {
+          const guessLetter = guess.letters[i]
 
-            if (guessLetter.status === LetterStatus.Correct && guessLetter.char !== word[i]) {
-              lettersMatch = false
-              break
-            }
-            if (guessLetter.status === LetterStatus.Wrong && word.includes(guessLetter.char)) {
-              lettersMatch = false
-              break
-            }
-            if (guessLetter.status === LetterStatus.Misplaced && !word.includes(guessLetter.char)) {
+          if (guessLetter.status === LetterStatus.Correct && guessLetter.char !== word[i]) {
+            lettersMatch = false
+            break
+          }
+          if (guessLetter.status === LetterStatus.Wrong && word.includes(guessLetter.char)) {
+            lettersMatch = false
+            break
+          }
+          if (guessLetter.status === LetterStatus.Misplaced && !word.includes(guessLetter.char)) {
+          if (guessLetter.status === LetterStatus.Misplaced) {
+            const misplacedCountInGuess = guess.text.split('').filter((c) => c === guessLetter.char).length
+            const misplacedCountInWord = word.split('').filter((c) => c === guessLetter.char).length
+            const samePosition = guessLetter.char === word[i]
+
+            if (!word.includes(guessLetter.char) || misplacedCountInGuess !== misplacedCountInWord || samePosition) {
               lettersMatch = false
               break
             }
           }
-          return lettersMatch
-        })
+        }
+        return lettersMatch
+      }})
 
-        filteredWordList = wordList.slice()
-      }
-    })
-    return filteredWordList
-  }
+      filteredWordList = wordList.slice()
+    }
+  })
+  return filteredWordList
+}
+
+  
+  
 
   // From: https://github.com/kashapov/react-testing-projects/blob/master/random-word-server/five-letter-words.json
   static readonly #words: string[] = [
