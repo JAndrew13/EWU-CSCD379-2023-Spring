@@ -14,7 +14,7 @@ on:
     - wordle-web/**
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    branches:
+    branches: 
       - Assignment-1
 
 jobs:
