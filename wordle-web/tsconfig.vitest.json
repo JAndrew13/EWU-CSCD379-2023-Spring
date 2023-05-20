@@ -5,6 +5,6 @@
     "ignoreDeprecations": "5.0",
     "composite": true,
     "lib": [],
-    "types": ["node"],
+    "types": ["node, jsdom"],
   }
 }
